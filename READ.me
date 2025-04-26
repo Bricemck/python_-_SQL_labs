@@ -1,0 +1,50 @@
+CREATE TABLE companies ( 
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  industry TEXT,
+  founded_year INTEGER,
+  headquarters TEXT
+);
+
+//Creates a table named company.
+//id is a unique identifier.  
+//Serial handles incrementing numbers automatically.
+//Primary key makes it unique and not null.
+//Name stores company name as text.  Not null makes it mandatory.
+//Industry requires text, pretty self explanatory.
+//Founded year is an interger obviously.
+//headquarters would store an address, we'll do a city for ease of data manip.
+
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  email TEXT UNIQUE,
+  position TEXT,
+  salary NUMERIC(10, 2),
+  company_id INTEGER REFERENCES companies(id)
+);
+
+//Creates a table named employees.
+//id is a unique identifier.  
+//Serial handles incrementing numbers automatically.
+//Primary key makes it unique and not null.
+//Names are mandatory text, self explanatory.
+//Email is text that must be unique (no overlap)
+//Position text optional.
+//Stores salary that's 10 digits total, and 2 after the decimal.
+//Company_id is a column name in the employees table that stores a  foreign key.  
+//It connects the employee to a company's id.
+//It must match the type of the primary key that it's referring to - 
+//Which is id in the companies table.
+//References is the join request.
+//It links each employee to the company.
+//You can’t insert an employee with a company_id 
+//that doesn’t exist in the companies table.
+//If you want to delete a company, 
+//PostgreSQL won’t let you if there are still employees referencing it.
+
+INSERT INTO companies (name, industry, founded_year, headquarters) VALUES
+  ('Dewie Cheatem & Howe', 'Legal Services', 1995, 'New York, NY'),
+  ('Dark Abyss Media', 'Entertainment', 2010, 'Los Angeles, CA'),
+  ('Globo Corp', 'Conglomerate', 1982, 'Chicago, IL');
