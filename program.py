@@ -44,18 +44,7 @@ while terminate_program is False: #main loop
             position = input('Enter position (optional): ')  # Optional
             salary = input('Enter salary (optional, e.g., 50000.00): ')  # Optional
 
-    # Checks whether variable salary is truthy, (basically not an empty string).
-    # This is important because salary expects salary to be numeric(10, 2), which cooresponds to a decimal in Python.
-    # Basically we're ensuring compatibility.
-            if salary:
-                salary = float(salary)
-                #And here we're catching empty strings.
-            else:
-                salary = None
-
-    # If email is provided, ensure it’s unique, else set to None
-            if not email:
-                email = None
+ 
     #companies and employees are connected under company_id
             company_id = input('Enter company ID they serve under: ')
     #Another Postgre insertion to add an employee.
@@ -68,30 +57,38 @@ while terminate_program is False: #main loop
             #success message.
             print(f'Employee {first_name} {last_name} successfully added with position {position}.')
             
-    elif user_input == 'V':
-        print('Peering into the ministry of company records') 
+    elif user_input == 'V': # If user chooses 'view'
+        print('Peering into the ministry of company records') #Confirmation of slection.
+        #Prompting another choice. .capitalize makes it case insensitive.
         view_choice = input('Do you wish to know the dark details of [C]ompanies or [E]mployees?').capitalize()
         if view_choice == 'C':
-            cursor.execute("SELECT * FROM COMPANIES;")
-            rows = cursor.fetchall()
-            if rows:
+            cursor.execute("SELECT * FROM COMPANIES;") #Postgre to view all companies.
+            rows = cursor.fetchall() #object that manages the database query.
+            #Let's you eqecute SQL commands
+            if rows: #loop through rows in DB to print the rows.
                 for row in rows:
                     print(row)
-            else:
+            else: #if no companies exist print the following
                 print('My dark magic reacheth not that far.')
+
+                #print employees to view, I tried to loop through and show them all, but I didn't quite figure 
+                #it out in time.
         elif view_choice == 'E':
             print('\nWhich company’s minions do you wish to inspect?')
             print('[1] Dewie Cheatem & Howe')
             print('[2] Dark Abyss Media')
             print('[3] Globo Corp')
             print('[A] All Employees')
-            company_choice = input('Make your selection: ').capitalize()
+            company_choice = input('Make your selection: ').capitalize() #Get the selection.
+            #make case insensitive.
 
-            query = None
+            query = None #Prepares a variable to store the SQL based on the choice.
 
-            # for company in companies:
+            #Yeah I tried to loop through here.  Didn't quite figure it out in time.
+            # for company in companies: 
             #     print(f"[{company[0]}] {company[1]} {company[2]}")
 
+            #Logic loop to set the SQL based on choice.
             if company_choice == '1':
                 query = "SELECT * FROM EMPLOYEES WHERE company_id = 1;"
             elif company_choice == '2':
@@ -103,18 +100,24 @@ while terminate_program is False: #main loop
             else:
                 print('Big Brother frowns upon your indecisiveness.')
             
+            #if valid query, fetch the results.
             if query: 
                 cursor.execute(query)
                 rows = cursor.fetchall()
                 if rows:
                     for row in rows:
                         print(row)
+                        #Print employees line by line.
             continue  
+
+        #It was so late when I wrote this, I was done being clever.
     elif user_input == 'U':
         print("update stuff... I'm too tired to keep up the dystopian stuff")
 
+        #Similar to above ask for user input.
         update_choice = input('Do you wish to update a [C]ompany or an [E]mployee? ').capitalize()
 
+        #We need the cursor again to be able to execute the SQL.  This time finding companies to update.
         if update_choice == 'C':
             cursor.execute("SELECT id, name FROM COMPANIES;")
             companies = cursor.fetchall()
